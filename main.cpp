@@ -1,11 +1,16 @@
+#include "static_array.h"
 #include "dynamic_array.h"
+#include "print.h"
+
 
 int main(){
     Array<float> A = {1,2,3,4,5};
 
-    std::cout << A.capacity();
-    A.append(6);
+    print("something");
 
-    std::cout << A.capacity();
+    for(auto element : A){
+        print(element);
+    }
+
     return 0;
 }

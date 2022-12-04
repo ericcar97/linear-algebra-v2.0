@@ -23,6 +23,11 @@ class Array<Type>{
         size_type size() const {return size_;}
         size_type capacity() const {return capacity_;}
 
+        Array()
+            : size_(0)
+            , capacity_(3)
+            , data_(new value_type[capacity_]){}
+
         Array(size_type size)
             : size_(size)
             , capacity_(size)

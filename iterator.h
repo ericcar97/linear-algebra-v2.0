@@ -10,13 +10,8 @@ class Iterator{
         using const_reference = value_type const&;
         using pointer = value_type*;
 
-        Iterator()
-            : address_(nullptr)
-            {}
-        
-        Iterator(pointer address)
-            : address_(address)
-            {}
+        Iterator() : address_(nullptr){}
+        Iterator(pointer address) : address_(address){}
 
         self& operator ++(){
             ++address_;
@@ -28,27 +23,14 @@ class Iterator{
             ++(*this);
             return copy;
         }
-
-        pointer operator ->(){
-            return address_;
-        }
-
-        reference operator *(){
-            return *address_;
-        }
-
-        bool operator ==(const self& other){
-            return address_ == other.address_;
-        }
-
-        bool operator !=(const self& other){
-            return !(*this == other);
-        }
+        
+        pointer operator ->(){return address_;}
+        reference operator *(){return *address_;}
+        bool operator ==(const self& other){return address_ == other.address_;}
+        bool operator !=(const self& other){return !(*this == other);}
 
     private:
         pointer address_;
 };
-
-
 
 #endif
