@@ -12,17 +12,23 @@ template<typename Type, size_type ... Sizes> class Array;
 template<typename Type, size_type Size>
 class Array<Type,Size>{
     public:
+        using self = Array<Type,Size>;
         using value_type = Type;
         using array_type = value_type[Size];
         using reference = value_type&;
         using const_reference = value_type const &;
-        using iterator = Iterator<Array<Type,Size>>;
         using initializer = std::initializer_list<value_type>;
+        using iterator = Iterator<self>;
+        using const_iterator = ConstIterator<self>;
+
 
         iterator begin(){return data_;}
-        iterator end(){return data_ + Size;}
+        iterator end(){return data_ + size_;}
 
-        size_type size(){return Size;}
+        const_iterator begin() const {return data_;}
+        const_iterator end() const {return data_ + size_;}
+
+        size_type size() const {return size_;}
 
         Array() : data_{} {}
         Array(initializer list){std::copy(list.begin(), list.end(), data_);}
@@ -31,7 +37,10 @@ class Array<Type,Size>{
         const_reference operator[](index i) const {return data_[i];}
     private:
         array_type data_;
+        size_type size_ = Size;
 };
+
+
 
 template<typename Type, size_type Size, size_type ... Sizes>
 class Array<Type,Size,Sizes...>{

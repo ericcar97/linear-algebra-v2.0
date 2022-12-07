@@ -1,31 +1,42 @@
 #ifndef DYNAMIC_ARRAY_H
 #define DYNAMIC_ARRAY_H
 
+#include<vector>
+
 #include<iostream>
 #include "iterator.h"
 
 using size_type = std::size_t;
 
+const size_type unknown = 0;
+
 template<typename Type, size_type ... Sizes> class Array;
 
 template<typename Type>
-class Array<Type>{
+class Array<Type,unknown>{
     public:
+        using self = Array<Type,unknown>;
         using value_type = Type;
         using reference = value_type&;
         using const_reference = value_type const &;
         using pointer = value_type*;
         using initializer = std::initializer_list<value_type>;
-        using self = Array<Type>;
         using index = std::size_t;
-        using iterator = Iterator<Array<Type>>;
+        using iterator = Iterator<self>;
+        using const_iterator = ConstIterator<self>;
+
+        iterator begin(){return data_;}
+        iterator end(){return data_ + size_;}
+
+        const_iterator begin() const {return data_;}
+        const_iterator end() const {return data_ + size_;}
 
         size_type size() const {return size_;}
         size_type capacity() const {return capacity_;}
 
         Array()
             : size_(0)
-            , capacity_(3)
+            , capacity_(100)
             , data_(new value_type[capacity_]){}
 
         Array(size_type size)
@@ -57,9 +68,6 @@ class Array<Type>{
             //std::cout << "destructor" << std::endl;
         }
 
-        iterator begin(){return data_;}
-        iterator end(){return data_ + size_;}
-
         self& operator = (self other){
             swap(*this,other);
             //std::cout << "copy operator" << std::endl;
@@ -89,20 +97,21 @@ class Array<Type>{
         pointer data_;
 
         void reallocate(size_type capacity){
-            size_type size = size_;
-            if(capacity < size){
-                size = capacity;
-            }
+
             
             value_type data = new value_type[capacity];
+
+
+            size_type size = size_;
+            if(capacity < size){
+                size_ = capacity;
+            }
 
             for(index i = 0; i < size; i++){
                 data[i] = data_[i];
             }
-            size_ = size;
             capacity_ = capacity;
             data_ = data;
-            delete[] data;
         };
 
         friend void swap(self& first, self& other){
